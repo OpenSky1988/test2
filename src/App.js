@@ -1,26 +1,64 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {Component} from 'react';
+import shortid from 'shortid';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import AdsList from './components/AdsList';
+import AdForm from './components/AdForm';
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.populateLocalStorage();
+  }
+
+  ads = [
+    {
+      id: 'r8j4h84g',
+      phone: '+7 (987) 654-3210',
+      text: 'Кот большой и вредный, но очень хороший!',
+      title: 'Продам кота'
+    },
+    {
+      id: 'bv8f4kl',
+      phone: '+7 (987) 654-3210',
+      text: 'Кот большой и вредный, но очень хороший!',
+      title: 'Продам кота 1'
+    },
+    {
+      id: '9fjew5m3',
+      phone: '+7 (987) 654-3210',
+      text: 'Кот большой и вредный, но очень хороший!',
+      title: 'Продам кота 2'
+    }
+  ];
+
+  // Только чтобы наполнить localStorage при первом входе
+  populateLocalStorage = () => {
+    this.ads.map(ad => localStorage.setItem(ad.id, JSON.stringify(ad)));
+  }
+
+  createAd = (phone, text, title) => {
+    const newAd = {
+      id: shortid.generate(),
+      phone,
+      text,
+      title
+    };
+
+    localStorage.setItem(newAd.id, JSON.stringify(newAd));
+  }
+
+  editAd = ad => localStorage.setItem(ad.id, JSON.stringify(ad));
+
+  deleteAd = ad => localStorage.removeItem(ad.id);
+
+  render () {
+    return (
+      <div className="App">
+        <AdForm />
+        <AdsList editAd={this.editAd}/>
+      </div>
+    );
+  }
 }
 
 export default App;
