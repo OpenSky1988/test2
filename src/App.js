@@ -1,60 +1,25 @@
 import React, {Component} from 'react';
 import shortid from 'shortid';
+import { connect } from 'react-redux';
 
 import AdsList from './components/AdsList';
 import AdForm from './components/AdForm';
 
+import { addAd, updateAd, removeAd } from './actions/adsActions';
+import getUsers from './actions/usersActions';
+
 class App extends Component {
   constructor(props) {
     super(props);
-    this.populateLocalStorage();
 
+    this.getUsers();
     this.state = {
-      showNewAdForm: false,
-      ads: []
+      showNewAdForm: false
     }
   }
 
-  ads = [
-    {
-      date: 1580817591901,
-      id: 'r8j4h84g',
-      phone: '+7 (987) 654-3210',
-      text: 'Кот большой и вредный, но очень хороший!',
-      title: 'Продам кота'
-    },
-    {
-      date: 1580817634096,
-      id: 'bv8f4kl',
-      phone: '+7 (987) 654-3210',
-      text: 'Кот большой и вредный, но очень хороший!',
-      title: 'Продам кота 1'
-    },
-    {
-      date: 1580817656313,
-      id: '9fjew5m3',
-      phone: '+7 (987) 654-3210',
-      text: 'Кот большой и вредный, но очень хороший!',
-      title: 'Продам кота 2'
-    }
-  ];
-
-  componentDidMount() {
-    const ads = [];
-
-    for (let i=0; i<localStorage.length; i++) {
-        let key = localStorage.key(i);
-        ads.push(JSON.parse(localStorage.getItem(key)));
-    }
-
-    ads.sort((oldAd, newAd) => (newAd.data - oldAd.data));
-
-    this.setState({ads});
-  }
-
-  // Только чтобы наполнить localStorage при первом входе
-  populateLocalStorage = () => {
-    this.ads.map(ad => localStorage.setItem(ad.id, JSON.stringify(ad)));
+  getUsers = () => {
+    this.props.getUsers();
   }
 
   createAd = (phone, text, title) => {
@@ -66,30 +31,15 @@ class App extends Component {
       title
     };
 
-    localStorage.setItem(newAd.id, JSON.stringify(newAd));
-    this.setState({
-      ads: [
-        newAd,
-        ...this.state.ads,
-      ]
-    });
+    this.props.addAd(newAd);
   }
 
   editAd = updatedAd => {
-    const ads = this.state.ads.map(ad => {
-      return ad.id === updatedAd.id ?
-        updatedAd :
-        ad;
-    });
-    
-    localStorage.setItem(updatedAd.id, JSON.stringify(updatedAd));
-    this.setState({ads});
+    this.props.updateAd(updatedAd);
   };
 
   deleteAd = adId => {
-    localStorage.removeItem(adId);
-    const newAds = this.state.ads.filter(ad => (ad.id !== adId));
-    this.setState({ads: newAds});
+    this.props.removeAd(adId);
   };
 
   showForm = () => {
@@ -103,12 +53,23 @@ class App extends Component {
   render () {
     return (
       <div className="App">
+        {this.props.users.status === 'waiting' && <h4>Загрузка пользовательских данных...</h4>}
         <button onClick={this.showForm}>Добавить новое</button>
         {this.state.showNewAdForm && <AdForm hideForm={this.hideForm} adAction={this.createAd}/>}
-        <AdsList ads={this.state.ads} editAd={this.editAd} deleteAd={this.deleteAd}/>
+        <AdsList ads={this.props.ads} editAd={this.editAd} deleteAd={this.deleteAd}/>
       </div>
     );
   }
 }
 
-export default App;
+const mapStateToProps = (state) => ({
+  ads: state.ads,
+  users: state.users
+});
+
+export default connect(mapStateToProps, {
+  addAd,
+  updateAd,
+  removeAd,
+  getUsers
+})(App);

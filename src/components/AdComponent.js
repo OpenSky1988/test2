@@ -29,7 +29,7 @@ class Ad extends Component  {
                     hideForm={this.hideAdEditForm}
                     adAction={this.props.editAd}
                     ad={{
-                        data: this.props.data,
+                        date: this.props.date,
                         id: this.props.id
                     }}/>}
             </article>

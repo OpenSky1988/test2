@@ -28,6 +28,7 @@ class AdForm extends Component {
         
         if (isFormValid) {
             if (this.props.ad) {
+                console.log(this.props.ad)
                 const ad = {
                     ...this.props.ad,
                     phone,
