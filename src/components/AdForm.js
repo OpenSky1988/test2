@@ -8,7 +8,8 @@ class AdForm extends Component {
             id: this.props.id,
             phone: '',
             text: '',
-            title: ''
+            title: '',
+            error: ''
         }
     }
 
@@ -23,21 +24,43 @@ class AdForm extends Component {
     onSubmit = (event) => {
         event.preventDefault();
         const {phone, text, title} = this.state;
-
-        if (this.props.ad) {
-            const ad = {
-                ...this.props.ad,
-                phone,
-                text,
-                title
-            };
-            
-            this.props.adAction(ad);
-        } else {
-            this.props.adAction(phone, text, title);
-        }
+        const isFormValid = this.validateForm();
         
-        this.props.hideForm();
+        if (isFormValid) {
+            if (this.props.ad) {
+                const ad = {
+                    ...this.props.ad,
+                    phone,
+                    text,
+                    title
+                };
+    
+                this.props.adAction(ad);
+            } else {
+                this.props.adAction(phone, text, title);
+            }
+            
+            this.props.hideForm();
+        }
+    }
+
+    validateForm = () => {
+        const {phone, text, title} = this.state;
+        const phoneRegExp = /(\+7|8)[- _]*\(?[- _]*(\d{3}[- _]*\)?([- _]*\d){7}|\d\d[- _]*\d\d[- _]*\)?([- _]*\d){6})/g;
+
+        if (title.length === 0 || title.length > 100) {
+            this.setState({error: 'Введите заголовок длительностью е более 100 символов'});
+            return false;
+        } else if (phone.length === 0 || !phoneRegExp.test(phone)) {
+            this.setState({error: 'Введите телефн в формате +7 999 888 7766'});
+            return false;
+        } else if (text.length > 300) {
+            this.setState({error: 'Длительность текста не должна превышать 300 символов'});
+            return false;
+        }
+
+        this.setState({error: ''});
+        return true;
     }
 
     hideForm = () => {
@@ -69,6 +92,7 @@ class AdForm extends Component {
                     name="text"
                     placeholder="Текст объявления"
                 />
+                <p>{this.state.error}</p>
                 <button
                     className="btn submit-btn"
                     id="submit-btn"
