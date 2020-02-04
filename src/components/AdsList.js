@@ -3,21 +3,16 @@ import Ad from './AdComponent';
 
 class AdsList extends Component {
     renderAds = () => {
-        const ads = [];
-
-        for (let i=0; i<localStorage.length; i++) {
-            let key = localStorage.key(i);
-            ads.push(JSON.parse(localStorage.getItem(key)));
-        }
-        
-        return ads.map(ad => (
+        return this.props.ads.map(ad => (
             <Ad
+                date={ad.date}
                 id={ad.id}
                 title={ad.title}
                 text={ad.text}
                 phone={ad.phone}
                 key={ad.id}
                 editAd={this.props.editAd}
+                deleteAd={this.props.deleteAd}
             />
         ));
     };

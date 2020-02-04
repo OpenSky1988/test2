@@ -22,7 +22,26 @@ class AdForm extends Component {
     
     onSubmit = (event) => {
         event.preventDefault();
-        this.props.onSubmit()
+        const {phone, text, title} = this.state;
+
+        if (this.props.ad) {
+            const ad = {
+                ...this.props.ad,
+                phone,
+                text,
+                title
+            };
+            
+            this.props.adAction(ad);
+        } else {
+            this.props.adAction(phone, text, title);
+        }
+        
+        this.props.hideForm();
+    }
+
+    hideForm = () => {
+        this.props.hideForm();
     }
     
     render() {    
@@ -57,6 +76,9 @@ class AdForm extends Component {
                     name="submit"
                 >
                     Отправить
+                </button>
+                <button onClick={this.hideForm}>
+                    Отмена
                 </button>
             </form>
         );
