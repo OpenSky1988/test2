@@ -51,12 +51,21 @@ class App extends Component {
   }
 
   render () {
+    const isAuthorized = this.props.users.status === 'received';
     return (
       <div className="App">
-        {this.props.users.status === 'waiting' && <h4>Загрузка пользовательских данных...</h4>}
-        <button onClick={this.showForm}>Добавить новое</button>
+        {
+          this.props.users.status === 'waiting' ?
+            <h4>Загрузка пользовательских данных...</h4> :
+            isAuthorized && <button onClick={this.showForm}>Добавить новое</button>
+        }
         {this.state.showNewAdForm && <AdForm hideForm={this.hideForm} adAction={this.createAd}/>}
-        <AdsList ads={this.props.ads} editAd={this.editAd} deleteAd={this.deleteAd}/>
+        <AdsList
+          ads={this.props.ads}
+          editAd={this.editAd}
+          deleteAd={this.deleteAd}
+          isAuthorized={isAuthorized}
+        />
       </div>
     );
   }

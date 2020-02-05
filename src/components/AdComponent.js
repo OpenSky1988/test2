@@ -23,8 +23,13 @@ class Ad extends Component  {
                 <h3>{title}</h3>
                 <p>{text}</p>
                 <p>Тел: {phone}</p>
-                <button onClick={this.showAdEditForm}>Редактировать</button>
-                <button onClick={this.deleteAd}>Удалить</button>
+                {
+                    this.props.isAuthorized &&
+                    <div>
+                        <button onClick={this.showAdEditForm}>Редактировать</button>
+                        <button onClick={this.deleteAd}>Удалить</button>
+                    </div>
+                }
                 {this.state.isAdEditFormShown && <AdForm
                     hideForm={this.hideAdEditForm}
                     adAction={this.props.editAd}

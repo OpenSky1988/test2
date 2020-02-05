@@ -1,4 +1,5 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 class AdForm extends Component {
     constructor(props) {
@@ -86,6 +87,7 @@ class AdForm extends Component {
                     name="phone"
                     type="phone"
                     placeholder="Телефон"
+                    value={this.props.users.data[0].phone}
                 />
                 <textarea
                     onChange={this.onChange}
@@ -110,4 +112,8 @@ class AdForm extends Component {
     }
 }
 
-export default AdForm;
+const mapStateToProps = (state) => ({
+    users: state.users
+  });
+
+export default connect(mapStateToProps, {})(AdForm);
