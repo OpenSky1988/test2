@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import './AdForm.css';
+
 class AdForm extends Component {
     constructor(props) {
         super(props);
@@ -96,17 +98,19 @@ class AdForm extends Component {
                     placeholder="Текст объявления"
                 />
                 <p>{this.state.error}</p>
-                <button
-                    className="btn submit-btn"
-                    id="submit-btn"
-                    type="submit"
-                    name="submit"
-                >
-                    Отправить
-                </button>
-                <button onClick={this.hideForm}>
-                    Отмена
-                </button>
+                <div className="buttons">
+                    <button
+                        className="btn submit-btn"
+                        id="submit-btn"
+                        type="submit"
+                        name="submit"
+                    >
+                        Отправить
+                    </button>
+                    <button onClick={this.hideForm}>
+                        Отмена
+                    </button>
+                </div>
             </form>
         );
     }

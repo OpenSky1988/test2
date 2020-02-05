@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import AdForm from './AdForm';
 
+import './AdComponent.css';
+
 class Ad extends Component  {
     constructor(props) {
         super(props);
