@@ -9,7 +9,7 @@ class AdForm extends Component {
 
         this.state = {
             id: this.props.id,
-            phone: '',
+            phone: this.props.users.data.length ? this.props.users.data[0].phone : '',
             text: '',
             title: '',
             error: ''
@@ -81,6 +81,7 @@ class AdForm extends Component {
                     name="title"
                     type="title"
                     placeholder="Заголовок"
+                    value={this.state.title}
                 />
                 <input
                     onChange={this.onChange}
@@ -89,13 +90,14 @@ class AdForm extends Component {
                     name="phone"
                     type="phone"
                     placeholder="Телефон"
-                    value={this.props.users.data[0].phone}
+                    value={this.state.phone}
                 />
                 <textarea
                     onChange={this.onChange}
                     className="forms text"
                     name="text"
                     placeholder="Текст объявления"
+                    value={this.state.text}
                 />
                 <p>{this.state.error}</p>
                 <div className="buttons">
